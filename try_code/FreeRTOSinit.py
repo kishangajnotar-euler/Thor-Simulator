@@ -1,4 +1,4 @@
-import multiprocessing
+import threading
 import chargingStationTest
 import chargingStationMain
 import energyMeter
@@ -6,14 +6,14 @@ import flashCharger
 import telemetryDevice
 
 def createTasks():
-    t1=multiprocessing.Process(target=chargingStationTest.chargingStationSanityTask,args=())
-    t2=multiprocessing.Process(target=chargingStationMain.chargerLoop,args=())
-    t3=multiprocessing.Process(target=telemetryDevice.telemetryParser,args=())
-    # t4=multiprocessing.Process(target=type1Task,args=())
-    # t5=multiprocessing.Process(target=idleTask,args=())
-    # t6=multiprocessing.Process(target=ledTask,args=())
-    t7=multiprocessing.Process(target=energyMeter.energyMeterTask,args=())
-    t8=multiprocessing.Process(target=flashCharger.starkTXCallback,args=())
+    t1=threading.Thread(target=chargingStationTest.chargingStationSanityTask,args=())
+    t2=threading.Thread(target=chargingStationMain.chargerLoop,args=())
+    t3=threading.Thread(target=telemetryDevice.telemetryParser,args=())
+    # t4=threading.Thread(target=type1Task,args=())
+    # t5=threading.Thread(target=idleTask,args=())
+    # t6=threading.Thread(target=ledTask,args=())
+    t7=threading.Thread(target=energyMeter.energyMeterTask,args=())
+    t8=threading.Thread(target=flashCharger.starkTXCallback,args=())
     t1.start()
     t2.start()
     t3.start()

@@ -8,12 +8,12 @@ def chargingStationSanityTask():
     print("chargingStationSanityTask task created")
 
     #this is for xeventgroup wait
-    system_event_group.wait()
-    bits_to_wait_for = initial_sanity_check_bit | runtime_sanity_check_bit
-    while not (system_event_group.is_set() & bits_to_wait_for):
-        system_event_group.wait()
-    # Bits are set, continue execution
-    print("Bits are set, continuing execution.")
+    # system_event_group.wait()
+    # bits_to_wait_for = initial_sanity_check_bit | runtime_sanity_check_bit
+    # while not (system_event_group.is_set() & bits_to_wait_for):
+    #     system_event_group.wait()
+    # # Bits are set, continue execution
+    # print("Bits are set, continuing execution.")
 
     #this is for state of chargerState
     while(1):

@@ -1,11 +1,11 @@
-import multiprocessing
+import threading
 from enum import Enum
 
 #this is for xeventgroup wait 
-system_event_group = multiprocessing.Event()
-system_event_group.set()
-initial_sanity_check_bit = 0b0001
-runtime_sanity_check_bit = 0b0010
+# system_event_group = multiprocessing.Event()
+# system_event_group.set()
+# initial_sanity_check_bit = 0b0001
+# runtime_sanity_check_bit = 0b0010
 
 #this is for state of chargerState
 class chargerState_t(Enum):
