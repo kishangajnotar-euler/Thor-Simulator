@@ -7,5 +7,4 @@ def can1():
         print("CAN 1", msg)
         msg = bus.recv()
         if msg != None:
-            #set event bit
             pass
