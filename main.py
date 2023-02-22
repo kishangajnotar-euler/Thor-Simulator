@@ -26,5 +26,8 @@ CAN_2.set_filters(filters)
 # CAN_2 = can.interface.Bus(bustype='pcan', channel='PCAN_USBBUS1', bitrate=250000)  
 
 if __name__ == "__main__":
+    createEventGroups()
     createTasks()
+    createTimers()
+    vTaskStartScheduler()
     stask()
