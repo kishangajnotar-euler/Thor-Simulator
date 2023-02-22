@@ -21,6 +21,10 @@ def createTasks():
     can2Rx = threading.Thread(target =can2)
     type1Task=threading.Thread(target=chargingStationMain.type1Task)
     telemetryParser=threading.Thread(target=telemetryDevice.telemetryParser)
+    initial_sanityevent = None
+    runtime_sanityevent = None
+    initial_sanityevent = threading.Event()
+    runtime_sanityevent = threading.Event()
 def stask():
     can1Rx.start()
     can2Rx.start()
