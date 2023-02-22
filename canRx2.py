@@ -3,4 +3,4 @@ def can2():
     msg = bus.recv()
     while(msg): 
         print("CAN 2 ", msg)
-        msg = bus.recv()
+        msg = bus.recv()   

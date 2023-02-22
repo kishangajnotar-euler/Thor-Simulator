@@ -8,7 +8,7 @@ from canRx1 import can1
 from canRx2 import can2
 can1Rx = None 
 can2Rx = None
-
+t1
 
 def createTasks():
     global can1Rx, can2Rx
@@ -22,7 +22,14 @@ def createTasks():
     # t6=threading.Thread(target=ledTask,args=())
     t7=threading.Thread(target=energyMeter.energyMeterTask,args=())
     t8=threading.Thread(target=flashCharger.starkTXCallback,args=())
-    
+
+
+def createEventGroups():
+    print("createEventGroups is created ")
+def createTimers():
+    print("createTimers is created")
+def vTaskStartScheduler():
+    print("vTaskStartScheduler is created")
 
 def stask():
     can1Rx.start()
