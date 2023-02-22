@@ -4,7 +4,6 @@ import can
 import canID
 import time
 def starkTXCallback():
-    print("starkTXCallback is created")
     while(True):
         ack = [0x79]
         msg = can.Message(arbitration_id=canID.tx_stark, data=ack)

@@ -1,9 +1,12 @@
+from tmp_declaration import *
+from structure import *
 from main import CAN_2 as bus
 from main import initial_sanityevent, runtime_sanityevent, chargerState
 from screen import setscreen
 import can 
 import canID
 import time
+
 def handleIdleState():
     chargerState.state = 2
 
@@ -54,6 +57,14 @@ def chargerLoop():
             #something went horrible wrong 
             pass
 
+def type1Task():
+    system_event_group.wait()
+    bits_to_wait_for = initial_sanity_check_bit | runtime_sanity_check_bit
+    while not (system_event_group.is_set() & bits_to_wait_for):
+        system_event_group.wait()
+    
+    while(1):
+        syncDateTime()
 
 
     

@@ -1,5 +1,48 @@
 from enum import Enum
+import multiprocessing
 numberofBMSTempSensors =  6
+#this is for xeventgroup wait 
+system_event_group = multiprocessing.Event()
+system_event_group.set()
+initial_sanity_check_bit = 0b0001
+runtime_sanity_check_bit = 0b0010
+
+#this is for state of chargerState
+class chargerState_t(Enum):
+    sanityState=0
+    idleState=1
+    userAuthState=2
+    waitingforvehiclestateDC=3
+    waitingforvehiclestateAC=4
+    chargingState=5
+    emergencyState=6
+    displayBillState=7
+    disconnectedstate=8
+    chargingcompletestate=9
+    errorcodestate=10
+    chargingcompletestateAC=11
+
+chargerState=chargerState_t.userAuthState
+
+
+
+#for handleAuthState_noRFID
+class TwoWaySwitchStates(Enum):
+    DefaultPosition = 0  #NONE
+    DCCharge        = 1  #DC Charging
+    ACCharge        = 2  #AC Charging
+    ErrorPosition   = 3  #Error
+def requestedChargeState():
+    return TwoWaySwitchStates.DefaultPosition
+    #else return ACCharge // depends upon user input
+class SanityCheckErr_t():
+    errcount     =0
+    errEM        =0
+    errHUMIDITY  =0
+    errTemp      =0
+    errCharger   =0
+    reserved     =0
+SanityCheckErr=SanityCheckErr_t()
 
 
 class chargerType_t(Enum):
@@ -43,3 +86,13 @@ class thorParams:
 class chargerState_t(Enum):
     state = 0
     mapping = {0: "sanityState", 1:"idleState", 2:"userAuthState", 3:"chargingState", 4:"emergencyState", 5:"displayBillState"}
+# class RTC_TimeTypeDef:
+#     def __init__(self):
+#         self.Hours = hours
+#         self.Minutes = minutes
+#         self.Seconds = seconds
+#         self.TimeFormat = time_format
+#         self.SubSeconds = subseconds
+#         self.SecondFraction = second_fraction
+#         self.DayLightSaving = daylight_saving
+#         self.StoreOperation = store_operation
