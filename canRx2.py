@@ -13,3 +13,4 @@ def can2():
                 bmsdata.ChargerCurrent = read_float(msg, 4)
             elif msg.arbitration_id == canID.rx_FC_status:
                 pass
+

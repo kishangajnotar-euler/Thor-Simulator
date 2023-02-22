@@ -30,5 +30,8 @@ CAN_2.set_filters(filters)
 bmsdata = BMSDataParams()
 
 if __name__ == "__main__":
+    createEventGroups()
     createTasks()
+    createTimers()
+    vTaskStartScheduler()
     stask()
