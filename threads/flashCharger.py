@@ -13,6 +13,3 @@ def starkTXCallback():
         buffer[0] = canID.FC_ID
         msg = can.Message(arbitration_id=canID.tx_Sync, data=buffer)
         time.sleep(0.5)
-
-
-

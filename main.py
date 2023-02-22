@@ -1,6 +1,6 @@
 import can 
 from FreeRTOSinit import *
-from structure import BMSDataParams
+from structure import *
 # CAN0 - Charger - vehicle 
 # CAN1 - changer - inside 
 class pycan:
@@ -28,6 +28,9 @@ CAN_2.set_filters(filters)
 
 #bmsdata struct
 bmsdata = BMSDataParams()
+
+#charger State 
+chargerState = chargerState_t()
 
 if __name__ == "__main__":
     createTasks()
