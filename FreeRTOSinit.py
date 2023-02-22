@@ -13,6 +13,7 @@ def createTasks():
 def stask():
     can1Rx.start()
     can2Rx.start()
+    print("HEllo world ")
 
     
 
