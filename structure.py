@@ -83,6 +83,9 @@ class thorParams:
         self.lastPong = 0
         self.chargerType : chargerType_t
 
+class chargerState_t(Enum):
+    state = 0
+    mapping = {0: "sanityState", 1:"idleState", 2:"userAuthState", 3:"chargingState", 4:"emergencyState", 5:"displayBillState"}
 # class RTC_TimeTypeDef:
 #     def __init__(self):
 #         self.Hours = hours
