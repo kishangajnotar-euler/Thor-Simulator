@@ -1,9 +1,9 @@
 import threading
-import chargingStationTest
-import chargingStationMain
-import energyMeter
-import flashCharger
-import telemetryDevice
+from threads import chargingStationTest
+from threads import chargingStationMain
+from threads import energyMeter
+from threads import flashCharger
+from threads import telemetryDevice
 from canRx1 import can1
 from canRx2 import can2
 can1Rx = None 
