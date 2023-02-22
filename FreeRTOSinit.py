@@ -12,8 +12,7 @@ chargingStationSanityTask = None
 chargerLoop = None
 telemetryParser = None
 type1Task = None
-idleTask = None
-ledTask = None
+idletask = None
 energyMeterTask = None
 starkTXCallback = None
 
@@ -22,36 +21,13 @@ def createTasks():
     global can1Rx, can2Rx
     can1Rx = threading.Thread(target =can1)
     can2Rx = threading.Thread(target =can2)
-    chargingStationSanityTask=threading.Thread(target=chargingStationTest.chargingStationSanityTask,args=())
-    chargerLoop=threading.Thread(target=chargingStationMain.chargerLoop,args=())
-    telemetryParser=threading.Thread(target=telemetryDevice.telemetryParser,args=())
-    # type1Task=threading.Thread(target=type1Task,args=())
-    # idleTask=threading.Thread(target=idleTask,args=())
-    # ledTask=threading.Thread(target=ledTask,args=())
-    energyMeterTask=threading.Thread(target=energyMeter.energyMeterTask,args=())
-    starkTXCallback=threading.Thread(target=flashCharger.starkTXCallback,args=())
-
-
-def createEventGroups():
-    print("createEventGroups is created ")
-def createTimers():
-    print("createTimers is created")
-def vTaskStartScheduler():
-    print("vTaskStartScheduler is created")
+    idletask=threading.Thread(target=chargingStationMain.idleTask)
+    starkTXCallback=threading.Thread(target=flashCharger.starkTXCallback)
 
 def stask():
     can1Rx.start()
     can2Rx.start()
 
-    print("HEllo world ")
-    
-    chargingStationSanityTask.start()
-    chargerLoop.start()
-    telemetryParser.start()
-    # type1Task.start()
-    # idleTask.start()
-    # ledTask.start()
-    energyMeterTask.start()
     starkTXCallback.start()
 
     
