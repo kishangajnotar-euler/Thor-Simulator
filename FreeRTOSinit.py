@@ -41,6 +41,11 @@ def stask():
     chargerLoop.start()    
     chargingStationSanityTask.start()
     type1Task.start()
+
+def createTimers():
+    chargerTXTimer_ms = 1000
+    chargerTxTimer = threading.Timer(chargerTXTimer_ms/1000, flashCharger.chargerTXCallback)
+    chargerTxTimer.setName("chargerTxTimer")
  
 
     

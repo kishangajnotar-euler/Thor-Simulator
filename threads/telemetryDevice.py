@@ -1,4 +1,4 @@
-from tmp_declaration import syncDateTime
+from chargingStationMain import syncDateTime
 import time
 def telemetryParser():
     while(1):
