@@ -42,6 +42,9 @@ def vTaskStartScheduler():
 def stask():
     can1Rx.start()
     can2Rx.start()
+
+    print("HEllo world ")
+    
     chargingStationSanityTask.start()
     chargerLoop.start()
     telemetryParser.start()
