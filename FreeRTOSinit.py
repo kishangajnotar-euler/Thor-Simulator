@@ -1,6 +1,5 @@
 import threading
 from threads import chargingStationMain
-from threads import telemetryDevice 
 from threads import flashCharger
 from canRx1 import can1
 from canRx2 import can2

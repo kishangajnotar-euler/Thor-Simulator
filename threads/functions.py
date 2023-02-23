@@ -6,7 +6,11 @@ import can
 import canID
 
 def setscreen():
-    pass
+    buffer=[0]*8
+    buffer[0]  = 5
+    buffer[1]  = 2
+    message = can.Message(arbitration_id=canID.rx_Screen_id, data=buffer, is_extended_id=False)
+    bus.send(message)
 
 def syncDateTime():
     # sTime = RTC_TimeTypeDef()
