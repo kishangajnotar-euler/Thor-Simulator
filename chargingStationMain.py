@@ -1,6 +1,7 @@
 from functions import *
 from main import CAN_2
-from main import initial_sanityevent, runtime_sanityevent, chargerState
+from FreeRTOSinit import initial_sanityevent, runtime_sanityevent
+from structure import chargerState
 import can 
 import canID
 import time
@@ -44,11 +45,8 @@ def telemetryParser():
             syncDateTime()
 
 def type1Task():
-    system_event_group.wait()
-    bits_to_wait_for = initial_sanity_check_bit | runtime_sanity_check_bit
-    while not (system_event_group.is_set() & bits_to_wait_for):
-        system_event_group.wait()
-    
+    initial_sanityevent.wait()
+    runtime_sanityevent.wait()
     while(1):
         syncDateTime()
 

@@ -1,6 +1,6 @@
 import threading
-from threads import chargingStationMain
-from threads import flashCharger
+import chargingStationMain
+import flashCharger
 from canRx1 import can1
 from canRx2 import can2
 
@@ -18,7 +18,7 @@ runtime_sanityevent = None
 
 
 def createTasks():
-    global can1Rx, can2Rx, idletask, starkTXCallback, chargerLoop, initial_sanityevent, runtime_sanityevent, type1Task,telemetryParser
+    global can1Rx, can2Rx, idletask, starkTXCallback, chargerLoop, type1Task,telemetryParser
     can1Rx = threading.Thread(target =can1)
     can2Rx = threading.Thread(target =can2)
     idletask=threading.Thread(target=chargingStationMain.idleTask)
@@ -29,6 +29,7 @@ def createTasks():
     telemetryParser=threading.Thread(target=chargingStationMain.telemetryParser)
 
 def createEvent():
+    global  initial_sanityevent, runtime_sanityevent
     initial_sanityevent = threading.Event()
     runtime_sanityevent = threading.Event()
 
@@ -38,7 +39,7 @@ def stask():
     idletask.start()
     starkTXCallback.start()
     chargerLoop.start()    
-    chargingStationSanityTask.start()
+    telemetryParser.start()
     type1Task.start()
 
 def createTimers():

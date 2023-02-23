@@ -3,7 +3,7 @@ from main import CAN_2
 import can
 import canID
 import time
-from structure import *
+from structure import*
 
 def starkTXCallback():
     while(True):

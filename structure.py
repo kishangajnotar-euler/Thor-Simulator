@@ -1,5 +1,6 @@
 from enum import Enum
 import multiprocessing
+
 numberofBMSTempSensors =  6
 #this is for xeventgroup wait 
 system_event_group = multiprocessing.Event()
@@ -97,7 +98,7 @@ class chargerState_t(Enum):
 bmsdata = BMSDataParams()
 
 #charger State 
-chargerState = chargerState_t()
+chargerState = chargerState_t(0)
 deviceParams=thorParams()
 deviceParams.chargerType=1
 SanityCheckErr=SanityCheckErr_t()
