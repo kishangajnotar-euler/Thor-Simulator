@@ -22,19 +22,17 @@ class chargerState_t(Enum):
     errorcodestate=10
     chargingcompletestateAC=11
 
-chargerState=chargerState_t.userAuthState
-
-
-
 #for handleAuthState_noRFID
 class TwoWaySwitchStates(Enum):
     DefaultPosition = 0  #NONE
     DCCharge        = 1  #DC Charging
     ACCharge        = 2  #AC Charging
     ErrorPosition   = 3  #Error
+
 def requestedChargeState():
     return TwoWaySwitchStates.DefaultPosition
     #else return ACCharge // depends upon user input
+
 class SanityCheckErr_t():
     errcount     =0
     errEM        =0
@@ -42,8 +40,6 @@ class SanityCheckErr_t():
     errTemp      =0
     errCharger   =0
     reserved     =0
-SanityCheckErr=SanityCheckErr_t()
-
 
 class chargerType_t(Enum):
     noCharger = 0
@@ -96,3 +92,13 @@ class chargerState_t(Enum):
 #         self.SecondFraction = second_fraction
 #         self.DayLightSaving = daylight_saving
 #         self.StoreOperation = store_operation
+
+#bmsdata struct
+bmsdata = BMSDataParams()
+
+#charger State 
+chargerState = chargerState_t()
+deviceParams=thorParams()
+deviceParams.chargerType=1
+SanityCheckErr=SanityCheckErr_t()
+#chargerState=chargerState_t.userAuthState

@@ -32,15 +32,9 @@ CAN_1.set_filters(filters_can1)
 
 #filters for can1
 
-#bmsdata struct
-bmsdata = BMSDataParams()
-
-#charger State 
-chargerState = chargerState_t()
-deviceParams=thorParams()
-deviceParams.chargerType=1
-
 if __name__ == "__main__":
     createTasks()
+    createEvent()
     stask()
     createTimers()
+    
