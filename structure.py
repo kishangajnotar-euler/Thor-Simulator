@@ -9,19 +9,19 @@ initial_sanity_check_bit = 0b0001
 runtime_sanity_check_bit = 0b0010
 
 #this is for state of chargerState
-class chargerState_t(Enum):
-    sanityState=0
-    idleState=1
-    userAuthState=2
-    waitingforvehiclestateDC=3
-    waitingforvehiclestateAC=4
-    chargingState=5
-    emergencyState=6
-    displayBillState=7
-    disconnectedstate=8
-    chargingcompletestate=9
-    errorcodestate=10
-    chargingcompletestateAC=11
+# class chargerState_t(Enum):
+#     sanityState=0
+#     idleState=1
+#     userAuthState=2
+#     waitingforvehiclestateDC=3
+#     waitingforvehiclestateAC=4
+#     chargingState=5
+#     emergencyState=6
+#     displayBillState=7
+#     disconnectedstate=8
+#     chargingcompletestate=9
+#     errorcodestate=10
+#     chargingcompletestateAC=11
 
 #for handleAuthState_noRFID
 class TwoWaySwitchStates(Enum):
@@ -80,8 +80,8 @@ class thorParams:
         self.lastPong = 0
         self.chargerType : chargerType_t
 
-class chargerState_t(Enum):
-    state = 0
+class chargerState_t():
+    state = 1
     mapping = {0: "sanityState", 1:"idleState", 2:"userAuthState", 3:"chargingState", 4:"emergencyState", 5:"displayBillState"}
 # class RTC_TimeTypeDef:
 #     def __init__(self):
@@ -98,7 +98,7 @@ class chargerState_t(Enum):
 bmsdata = BMSDataParams()
 
 #charger State 
-chargerState = chargerState_t(0)
+chargerState = chargerState_t()
 deviceParams=thorParams()
 deviceParams.chargerType=1
 SanityCheckErr=SanityCheckErr_t()

@@ -5,7 +5,7 @@ import canID
 def can2():
     msg = bus.recv()
     while(msg): 
-        print("CAN 2 ", msg)
+        # print("CAN 2 ", msg)
         msg = bus.recv()
         if msg != None:
             if msg.arbitration_id == canID.rx_TPDO1:
