@@ -19,13 +19,32 @@ def handleAuthState_noRFID():
         counter = counter + 1
         if counter >= counterL:
             break 
+    chargerState.state = 3
         
 
 def handleEmergencyState():
-    pass
+    setscreen()
+    counter = 0
+    counterL = 20
+    while(True):
+        time.delay(500)
+        counter = counter + 1
+        if counter >= counterL:
+            break
+    chargerState.state = 1
+    setscreen()
+
+        
 
 def handleDisplayBill():
-    pass
+    counter = 0
+    counterL = 100
+    while True: 
+        setscreen()
+        time.delay(0.1)
+        counter = counter + 1
+        if counter >= counterL:
+            break
 
 def idleTask():
     while True: 
