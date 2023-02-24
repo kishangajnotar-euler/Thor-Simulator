@@ -101,5 +101,6 @@ bmsdata = BMSDataParams()
 chargerState = chargerState_t()
 deviceParams=thorParams()
 deviceParams.chargerType=1
+deviceParams.chargingMode = 1
 SanityCheckErr=SanityCheckErr_t()
 #chargerState=chargerState_t.userAuthState

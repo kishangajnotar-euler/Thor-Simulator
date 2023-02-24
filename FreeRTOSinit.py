@@ -22,7 +22,7 @@ def createTasks():
     global can1Rx, can2Rx, idletask, starkTXCallback, chargerLoopTask, type1task,telemetryParserTask
     can1Rx = threading.Thread(target =can1)
     can2Rx = threading.Thread(target =can2)
-    idletask=threading.Thread(target=idleTask)
+    # idletask=threading.Thread(target=idleTask)
     starkTXCallback=threading.Thread(target=flashCharger.starkTXCallback)
     chargerLoopTask = threading.Thread(target=chargerLoop)
     
@@ -38,7 +38,7 @@ def createEvent():
 def stask():
     can1Rx.start()
     can2Rx.start()
-    idletask.start()
+    # idletask.start()
     chargerLoopTask.start()    
     starkTXCallback.start()
     telemetryParserTask.start()
