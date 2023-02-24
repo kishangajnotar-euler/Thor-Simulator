@@ -8,9 +8,9 @@ from structure import chargerState
 
 
 chargerCantask = None
-def setscreen(val):
+def setscreen():
     buffer=[0]*8
-    buffer[0]  = val
+    buffer[0]  = 2
     buffer[1]  = 0
     message = can.Message(arbitration_id=canID.rx_Screen_id, data=buffer, is_extended_id=False)
     bus.send(message)
@@ -93,7 +93,7 @@ def setMarkType3Data():
     time.sleep(0.1)
     setEnergyConsumed()
     time.sleep(0.1)
-    setscreen(7)
+    setscreen()
 
 def setMarkType4Data():
     print("setMarkType4Data")
