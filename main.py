@@ -14,7 +14,7 @@ class pycan:
 # For windows 
 # pycan(name='can0', bustype='socketcan', bitrate=250000) #use this 
 CAN_1 = can.interface.Bus(bustype='pcan', channel='PCAN_USBBUS1', bitrate=250000)  
-CAN_2 = can.interface.Bus(bustype='pcan', channel='PCAN_USBBUS1', bitrate=250000)  
+CAN_2 = can.interface.Bus(bustype='pcan', channel='PCAN_USBBUS2', bitrate=250000)  
 
 
 #filers for can2
