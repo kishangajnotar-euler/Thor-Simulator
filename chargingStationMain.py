@@ -21,6 +21,8 @@ def chargerLoop():
     # Uncomment later
     # initial_sanityevent.wait()
     # runtime_sanityevent.wait()
+
+    print(" -- ")
     print("charger Loop ")
     while (True):
         print("Inside charger loop curren state :", chargerState.state)
