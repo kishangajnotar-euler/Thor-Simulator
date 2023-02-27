@@ -4,13 +4,17 @@ from structure import *
 from main import CAN_2 as bus
 import can
 import canID
+from structure import chargerState
 
+
+chargerCantask = None
 def setscreen():
     buffer=[0]*8
-    buffer[0]  = 5
-    buffer[1]  = 2
+    buffer[0]  = 2
+    buffer[1]  = 0
     message = can.Message(arbitration_id=canID.rx_Screen_id, data=buffer, is_extended_id=False)
     bus.send(message)
+    print("Updating screen")
 
 def syncDateTime():
     # sTime = RTC_TimeTypeDef()
@@ -21,15 +25,15 @@ def syncDateTime():
     buffer[2] = 30
     buffer[5] = 22
     buffer[6] = 2
-    buffer[7] = 2023
+    buffer[7] = 20
     #Transmit_on_CAN2(rx_calander_param, S, buffer, 8)
     message = can.Message(arbitration_id=canID.rx_calander_param, data=buffer, is_extended_id=False)
     bus.send(message)
 
 def setTTFC():
     ttfc=205
-    mins=ttfc%60
-    hours=ttfc/60
+    mins=int(ttfc%60)
+    hours=int(ttfc/60)
     buffer=[0]*8
     buffer[0] = hours
     buffer[1] = mins
@@ -39,9 +43,9 @@ def setTTFC():
     bus.send(message)
 
 def setEnergyConsumed():
-    energyConsumed_can=25.75
+    energyConsumed_can=int(25.75)
     buffer=[0]*8  
-    buffer[0] = energyConsumed_can & 0xFF
+    buffer[0] = (energyConsumed_can & 0xFF)
     buffer[1] = (energyConsumed_can >> 8) & 0xFF
     message = can.Message(arbitration_id=canID.rx_energy_consumed, data=buffer, is_extended_id=False)
     bus.send(message)
@@ -64,33 +68,37 @@ def setBillAmount():
     bus.send(message)
 
 def setUsername():
-    username="kishan"
+    username="hey"
     userlen=len(username)
-    username_can=username
-    message = can.Message(arbitration_id=canID.rx_username_lower, data=username_can, is_extended_id=False)
+    username_can=list(username)
+    buffer = [0] * 8
+    message = can.Message(arbitration_id=canID.rx_username_lower, data=buffer, is_extended_id=False)
     bus.send(message)
     if userlen > 8:
         message = can.Message(arbitration_id=canID.rx_username_upper, data=username_can, is_extended_id=False)
         bus.send(message)
     else :
-        buffer = [0] * 8
+        
         message = can.Message(arbitration_id=canID.rx_username_upper, data=buffer, is_extended_id=False)
         bus.send(message)
+    print("-------------- USER NAME SENT -------------------")
 
 def setMarkType3Data():
+    print("setMarkType3Data")
     setUsername()
-    time.sleep(1)
+    time.sleep(0.1)
     setBillAmount()
-    time.sleep(1)
+    time.sleep(0.1)
     setTTFC()
-    time.sleep(1)
+    time.sleep(0.1)
     setEnergyConsumed()
-    time.sleep(1)
+    time.sleep(0.1)
     setscreen()
 
 def setMarkType4Data():
+    print("setMarkType4Data")
     setUsername()
-    time.sleep(1)
+    time.sleep(0.1)
     setEnergyConsumed()
     time.sleep(1)
     setscreen()
@@ -98,14 +106,16 @@ def setMarkType4Data():
 def handleDisplayBill():
     count=0
     while(1):
+        print("Inside Handle diplay billl -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ")
         count=count+1
-        if count==100:
+        if count > 10:
+            chargerState.state = 1
             break
         setMarkType4Data()
 
 def handleEmergencyState():
     setscreen()
-    time.sleep(1)
+    time.sleep(0.1)
     setscreen()
 
 def handleIdleState():
@@ -113,7 +123,7 @@ def handleIdleState():
 
 def handleAuthState_noRFID():
     counter = 0
-    counterL = 1e3
+    counterL = 100
     while True: 
         setscreen()
         time.sleep(0.1)
@@ -123,23 +133,42 @@ def handleAuthState_noRFID():
     chargerState.state = 3
 
 def handleChargingState():
+    global chargerCantask
     setscreen()
+    count = 0
+    countL = 5
     while (1):
-        time.sleep(5)
+        print("Handle charging state")
+        time.sleep(1)
         setMarkType3Data()
         time.sleep(1)
-        if deviceParams.chargingMode== 1:
+        print(f"-------------------------------------------------------------------------------------------- ")
+        if deviceParams.chargingMode == 1 and chargerCantask == None:
+            print(" -------------------------------- TASK created -----------------------------------")
             time.sleep(3)
-            chargerCanTask=threading.Thread(target=chargerCanTask)
+            chargerCantask=threading.Thread(target=chargerCanTask)
+            chargerCantask.start()
         time.sleep(0.1)
+        count = count + 1 
+        if count > countL:
+            print("changing state from charging to idle ========================================")
+            chargerState.state = 5
+            chargerCantask.join()
+            break
+
+
+
+
+
 
 def chargerCanTask():
     while(1):
-        if chargerState.state==3:
+        print("chargerCanTask")
+        if chargerState.state!=3:
             buffer=[0]*8
             msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=buffer,is_extended_id=True)
             bus.send(msg)
-            time.sleep(0.5)
+            break
         if deviceParams.chargerType == 1 :
             rxBMSData=[0]*8
             rxBMSData[2] = 3
@@ -167,4 +196,5 @@ def chargerCanTask():
             buffer[7]=4
             msg = can.Message(arbitration_id=canID.tx_RPDO2, data=buffer,is_extended_id=False)
             bus.send(msg)
-            time.sleep(0.02)   
+            time.sleep(0.02)
+     

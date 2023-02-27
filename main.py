@@ -8,8 +8,8 @@ class pycan:
         self.bus = can.interface.Bus(name, bustype = btype, bitrate = bitrate)
 
 #For linux 
-# CAN_1 = pycan(name='can0', btype='socketcan', bitrate=250000).bus
-# CAN_2 = pycan(name='can1', btype='socketcan', bitrate=250000).bus
+CAN_1 = pycan(name='can0', btype='socketcan', bitrate=250000).bus
+CAN_2 = pycan(name='can1', btype='socketcan', bitrate=250000).bus
 
 # For windows 
 # pycan(name='can0', bustype='socketcan', bitrate=250000) #use this 

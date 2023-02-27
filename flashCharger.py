@@ -8,15 +8,20 @@ from structure import*
 def starkTXCallback():
     while(True):
         ack = [0x79]
+
+        print("Transmit on can 1 stark tx")
         msg = can.Message(arbitration_id=canID.tx_stark, data=ack)
         CAN_1.send(msg)
         buffer = [0] * 8
         buffer[0] = canID.FC_ID
+        print("Transmit on can 2 start tk")
         msg = can.Message(arbitration_id=canID.tx_Sync, data=buffer, is_extended_id=False)
         CAN_2.send(msg)
         time.sleep(0.5)
 
 def chargerTXCallback():
+
+    print("charger Tx call back")
     if chargerState.state==3:
         buffer=[0]*8
         msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=buffer,is_extended_id=True)
