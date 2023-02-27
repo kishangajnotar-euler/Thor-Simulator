@@ -4,6 +4,7 @@ import can
 import canID
 import time
 from structure import*
+rxBMSData = [0] * 8
 
 def starkTXCallback():
     while(True):
@@ -28,7 +29,7 @@ def chargerTXCallback():
         CAN_2.send(msg)
         time.sleep(0.5)
     if deviceParams.chargerType == 1 :
-        rxBMSData=[0]*8
+        global rxBMSData
         msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=rxBMSData,is_extended_id=True)
         CAN_2.send(msg)
     elif deviceParams.chargerType == 2:

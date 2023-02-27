@@ -5,6 +5,12 @@ from main import CAN_2 as bus
 import can
 import canID
 from structure import chargerState
+<<<<<<< HEAD
+=======
+import pandas as pd
+energytaski = 0
+chargerFlag = False
+>>>>>>> 2bb2fff17ca8a1c66066520e077f0f5f61f4ef2d
 
 
 chargerCantask = None
@@ -43,7 +49,19 @@ def setTTFC():
     bus.send(message)
 
 def setEnergyConsumed():
+<<<<<<< HEAD
     energyConsumed_can=int(25.75)
+=======
+    df = pd.read_csv('energyMeter.csv')
+
+    if energytaski > len(energytaski):
+        energyConsumed_can=int(df.iloc[-1]['value']*100)
+        chargerFlag = True
+    else:
+        energyConsumed_can=int(df.iloc[energytaski]['value']*100)
+        energytaski = energytaski + 1
+
+>>>>>>> 2bb2fff17ca8a1c66066520e077f0f5f61f4ef2d
     buffer=[0]*8  
     buffer[0] = (energyConsumed_can & 0xFF)
     buffer[1] = (energyConsumed_can >> 8) & 0xFF
@@ -149,8 +167,12 @@ def handleChargingState():
             chargerCantask=threading.Thread(target=chargerCanTask)
             chargerCantask.start()
         time.sleep(0.1)
+<<<<<<< HEAD
         count = count + 1 
         if count > countL:
+=======
+        if chargerFlag:
+>>>>>>> 2bb2fff17ca8a1c66066520e077f0f5f61f4ef2d
             print("changing state from charging to idle ========================================")
             chargerState.state = 5
             chargerCantask.join()
@@ -170,9 +192,7 @@ def chargerCanTask():
             bus.send(msg)
             break
         if deviceParams.chargerType == 1 :
-            rxBMSData=[0]*8
-            rxBMSData[2] = 3
-            rxBMSData[3] = 2
+            global rxBMSData
             msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=rxBMSData,is_extended_id=True)
             bus.send(msg)
             time.sleep(1)
