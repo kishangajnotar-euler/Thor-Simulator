@@ -46,7 +46,9 @@ def stask():
 
 def createTimers():
     chargerTXTimer_ms = 1000
-    chargerTxTimer = threading.Timer(chargerTXTimer_ms/1000, flashCharger.chargerTXCallback)
+    chargerTxTimer = threading.Timer(5, flashCharger.chargerTXCallback)
+    chargerTxTimer.start()
+    print(" =========================== TIMER STARTTED ===========================")
     chargerTxTimer.setName("chargerTxTimer")
  
 

@@ -1,6 +1,7 @@
 import can 
 from FreeRTOSinit import *
 from structure import *
+rxBMSData = [0] * 8
 # CAN0 - Charger - vehicle 
 # CAN1 - changer - inside 
 class pycan:
