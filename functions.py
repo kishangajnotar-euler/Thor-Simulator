@@ -187,11 +187,13 @@ def chargerCanTask():
         if chargerState.state!=3:
             buffer=[0]*8
             msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=buffer,is_extended_id=True)
+            write_in_log(msg)
             bus.send(msg)
             break
         if deviceParams.chargerType == 1 :
             # global rxBMSData
             msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=BMSdata.rxBMSData,is_extended_id=True)
+            write_in_log(msg)
             bus.send(msg)
             time.sleep(1)
         elif deviceParams.chargerType == 2:
@@ -199,6 +201,7 @@ def chargerCanTask():
             buffer[0] = 1
             buffer[1] = canID.FC_ID
             msg = can.Message(arbitration_id=canID.tx_NMT_Start, data=buffer,is_extended_id=False)
+            write_in_log(msg)
             bus.send(msg)
 
             for i in range(0,4):
@@ -207,12 +210,14 @@ def chargerCanTask():
                 buffer[i]=buffer[i]+1
             time.sleep(0.02)
             msg = can.Message(arbitration_id=canID.tx_RPDO1, data=buffer,is_extended_id=False)
+            write_in_log(msg)
             bus.send(msg)
 
             for i in range(4,8):
                 buffer[i]=0
             buffer[7]=4
             msg = can.Message(arbitration_id=canID.tx_RPDO2, data=buffer,is_extended_id=False)
+            write_in_log(msg)
             bus.send(msg)
             time.sleep(0.02)
      
