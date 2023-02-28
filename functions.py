@@ -168,12 +168,7 @@ def handleChargingState():
             chargerCantask=threading.Thread(target=chargerCanTask)
             chargerCantask.start()
         time.sleep(0.1)
-<<<<<<< HEAD
-        count = count + 1 
-        if count > countL:
-=======
         if chargerFlag:
->>>>>>> 2bb2fff17ca8a1c66066520e077f0f5f61f4ef2d
             print("changing state from charging to idle ========================================")
             chargerState.state = 5
             chargerCantask.join()
