@@ -1,0 +1,1 @@
+rxBMSData = [0] * 8
