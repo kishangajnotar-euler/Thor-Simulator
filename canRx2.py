@@ -7,6 +7,7 @@ def can2():
     while(msg): 
         # print("CAN 2 ", msg)
         msg = bus.recv()
+        # print("can 2", msg)
         if msg != None:
             if msg.arbitration_id == canID.rx_TPDO1:
                 bmsdata.ChargerVoltage = read_float(msg, 0)

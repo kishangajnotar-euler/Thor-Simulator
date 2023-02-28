@@ -8,6 +8,7 @@ from structure import chargerState
 <<<<<<< HEAD
 =======
 import pandas as pd
+import BMSdata
 energytaski = 0
 chargerFlag = False
 >>>>>>> 2bb2fff17ca8a1c66066520e077f0f5f61f4ef2d
@@ -53,8 +54,8 @@ def setEnergyConsumed():
     energyConsumed_can=int(25.75)
 =======
     df = pd.read_csv('energyMeter.csv')
-
-    if energytaski > len(energytaski):
+    global energytaski, chargerFlag
+    if energytaski > len(df):
         energyConsumed_can=int(df.iloc[-1]['value']*100)
         chargerFlag = True
     else:
@@ -192,8 +193,8 @@ def chargerCanTask():
             bus.send(msg)
             break
         if deviceParams.chargerType == 1 :
-            global rxBMSData
-            msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=rxBMSData,is_extended_id=True)
+            # global rxBMSData
+            msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=BMSdata.rxBMSData,is_extended_id=True)
             bus.send(msg)
             time.sleep(1)
         elif deviceParams.chargerType == 2:
