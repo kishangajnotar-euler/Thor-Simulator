@@ -5,13 +5,11 @@ from main import CAN_2 as bus
 import can
 import canID
 from structure import chargerState
-<<<<<<< HEAD
-=======
 import pandas as pd
 import BMSdata
 energytaski = 0
 chargerFlag = False
->>>>>>> 2bb2fff17ca8a1c66066520e077f0f5f61f4ef2d
+from data_log import write_in_log
 
 
 chargerCantask = None
@@ -20,6 +18,7 @@ def setscreen():
     buffer[0]  = 2
     buffer[1]  = 0
     message = can.Message(arbitration_id=canID.rx_Screen_id, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
     print("Updating screen")
 
@@ -35,6 +34,7 @@ def syncDateTime():
     buffer[7] = 20
     #Transmit_on_CAN2(rx_calander_param, S, buffer, 8)
     message = can.Message(arbitration_id=canID.rx_calander_param, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
 
 def setTTFC():
@@ -47,12 +47,10 @@ def setTTFC():
     buffer[2] = hours
     buffer[3] = mins
     message = can.Message(arbitration_id=canID.rx_bill_param, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
 
 def setEnergyConsumed():
-<<<<<<< HEAD
-    energyConsumed_can=int(25.75)
-=======
     df = pd.read_csv('energyMeter.csv')
     global energytaski, chargerFlag
     if energytaski > len(df):
@@ -62,11 +60,11 @@ def setEnergyConsumed():
         energyConsumed_can=int(df.iloc[energytaski]['value']*100)
         energytaski = energytaski + 1
 
->>>>>>> 2bb2fff17ca8a1c66066520e077f0f5f61f4ef2d
     buffer=[0]*8  
     buffer[0] = (energyConsumed_can & 0xFF)
     buffer[1] = (energyConsumed_can >> 8) & 0xFF
     message = can.Message(arbitration_id=canID.rx_energy_consumed, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
 
 def setBillAmount():
@@ -84,6 +82,7 @@ def setBillAmount():
     buffer[2] = (billAmount_int >> 16) & 0xFF
     buffer[3] = (billAmount_int >> 24) & 0xFF
     message = can.Message(arbitration_id=canID.rx_bill_amount, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
 
 def setUsername():
@@ -92,13 +91,16 @@ def setUsername():
     username_can=list(username)
     buffer = [0] * 8
     message = can.Message(arbitration_id=canID.rx_username_lower, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
     if userlen > 8:
         message = can.Message(arbitration_id=canID.rx_username_upper, data=username_can, is_extended_id=False)
+        write_in_log(message)
         bus.send(message)
     else :
         
         message = can.Message(arbitration_id=canID.rx_username_upper, data=buffer, is_extended_id=False)
+        write_in_log(message)
         bus.send(message)
     print("-------------- USER NAME SENT -------------------")
 

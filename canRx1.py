@@ -3,6 +3,7 @@ from structure import bmsdata
 from utils import read_float
 import BMSdata 
 import canID
+from data_log import write_in_log
 def can1():
     msg = bus.recv()
     while(msg): 
@@ -11,6 +12,7 @@ def can1():
         msg = bus.recv()
         # print(msg)
         if msg != None:
+            write_in_log(msg)
             if msg.arbitration_id == canID.rx_BMS_CHRGR:
                 if (msg.data[4] == 0 and msg.data[5] == 0 and msg.data[6] == 0 and msg.data[7] == 0):
                     print("Updating BMS parameters ")
