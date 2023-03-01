@@ -4,6 +4,11 @@ from utils import read_float
 import BMSdata 
 import canID
 from data_log import write_in_log
+from main import charger_info
+
+def parse_can_bhm(canmsg):
+    charger_info.bhm_received = 1
+    
 def can1():
     msg = bus.recv()
     while(msg): 
@@ -21,3 +26,6 @@ def can1():
                     print(BMSdata.rxBMSData)
                     # print("BMS DATA ----------------------------------")
                     # print(rxBMSData)
+            if msg.arbitration_id == canID.GBT_BHM_CAN_ID:
+                parse_can_bhm(msg)
+                pass
