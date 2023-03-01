@@ -106,7 +106,9 @@ def prepare_state_crm():
 def parse_state_chm():
     charger_info.bhm_received = 0.0
     charger_info.bst_received = 0.0 
-    # chm_data.version
+    chm_data.version_0=1
+    chm_data.version_1=128
+    charger_info.chm_op_state=0
 
 def send_chm(can_data: list):
     can_data[0] = 1
