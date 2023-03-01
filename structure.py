@@ -166,6 +166,13 @@ class charger_info_t:
         self.bms_connect_retry = 0
 
 
+class crm_data_t:
+    def __init__(self):
+        self.crm_result = 0
+        self.charger_sn = 0
+
+
+
 
 bmsdata = BMSDataParams()
 

@@ -1,6 +1,8 @@
 import can 
 from FreeRTOSinit import *
 from structure import *
+GBT_Stage = GBT_STAGE.HANDSHAKE
+charger_info = charger_info_t()
 
 # CAN0 - Charger - vehicle 
 # CAN1 - changer - inside 
