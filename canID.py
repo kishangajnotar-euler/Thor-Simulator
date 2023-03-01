@@ -49,3 +49,6 @@ tx_CHARGER_s = 0x116 #not used
 rx_BackendSYNC = 0x300 #not used
 rx_SlowCharger = 0x18FF50E5
 rx_FastCharger = 0x72C #not used
+
+GBT_CML_CAN_ID=0x1808F456
+GBT_CTS_CAN_ID=0x1807F456
