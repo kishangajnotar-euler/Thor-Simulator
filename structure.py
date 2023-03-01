@@ -1,5 +1,6 @@
 from enum import Enum
 import multiprocessing
+from gbt_structure import bms_data_settings_t
 
 numberofBMSTempSensors =  6
 #this is for xeventgroup wait 
@@ -114,7 +115,7 @@ class charger_info_t:
         self.channel_com_info = None
         self.channel_info = None
         # self.multi_packets_info = None
-        self.settings = None
+        self.settings = bms_data_settings_t()
         # self.report_status_chain = None
         self.stamp = 0
         self.stamp_1 = 0
