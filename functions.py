@@ -7,11 +7,10 @@ import canID
 from structure import chargerState
 import pandas as pd
 import BMSdata
+from GBT import GBTask
 energytaski = 0
 chargerFlag = False
-
-
-chargerCantask = None
+GBtask = None
 def setscreen():
     buffer=[0]*8
     buffer[0]  = 2
@@ -145,7 +144,7 @@ def handleAuthState_noRFID():
     chargerState.state = 3
 
 def handleChargingState():
-    global chargerCantask
+    global GBtask
     setscreen()
     count = 0
     countL = 5
@@ -155,16 +154,16 @@ def handleChargingState():
         setMarkType3Data()
         time.sleep(1)
         print(f"-------------------------------------------------------------------------------------------- ")
-        if deviceParams.chargingMode == 1 and chargerCantask == None:
+        if deviceParams.chargingMode == 1 and GBtask == None:
             print(" -------------------------------- TASK created -----------------------------------")
             time.sleep(3)
-            chargerCantask=threading.Thread(target=chargerCanTask)
-            chargerCantask.start()
+            GBtask=threading.Thread(target=GBTask)
+            GBtask.start()
         time.sleep(0.1)
         if chargerFlag:
             print("changing state from charging to idle ========================================")
             chargerState.state = 5
-            chargerCantask.join()
+            GBtask.join()
             break
 
 
