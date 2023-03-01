@@ -11,11 +11,14 @@ from GBT import GBTask
 energytaski = 0
 chargerFlag = False
 GBtask = None
+from data_log import write_in_log
+
 def setscreen():
     buffer=[0]*8
     buffer[0]  = 2
     buffer[1]  = 0
     message = can.Message(arbitration_id=canID.rx_Screen_id, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
     print("Updating screen")
 
@@ -31,6 +34,7 @@ def syncDateTime():
     buffer[7] = 20
     #Transmit_on_CAN2(rx_calander_param, S, buffer, 8)
     message = can.Message(arbitration_id=canID.rx_calander_param, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
 
 def setTTFC():
@@ -43,6 +47,7 @@ def setTTFC():
     buffer[2] = hours
     buffer[3] = mins
     message = can.Message(arbitration_id=canID.rx_bill_param, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
 
 def setEnergyConsumed():
@@ -59,6 +64,7 @@ def setEnergyConsumed():
     buffer[0] = (energyConsumed_can & 0xFF)
     buffer[1] = (energyConsumed_can >> 8) & 0xFF
     message = can.Message(arbitration_id=canID.rx_energy_consumed, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
 
 def setBillAmount():
@@ -76,6 +82,7 @@ def setBillAmount():
     buffer[2] = (billAmount_int >> 16) & 0xFF
     buffer[3] = (billAmount_int >> 24) & 0xFF
     message = can.Message(arbitration_id=canID.rx_bill_amount, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
 
 def setUsername():
@@ -84,13 +91,16 @@ def setUsername():
     username_can=list(username)
     buffer = [0] * 8
     message = can.Message(arbitration_id=canID.rx_username_lower, data=buffer, is_extended_id=False)
+    write_in_log(message)
     bus.send(message)
     if userlen > 8:
         message = can.Message(arbitration_id=canID.rx_username_upper, data=username_can, is_extended_id=False)
+        write_in_log(message)
         bus.send(message)
     else :
         
         message = can.Message(arbitration_id=canID.rx_username_upper, data=buffer, is_extended_id=False)
+        write_in_log(message)
         bus.send(message)
     print("-------------- USER NAME SENT -------------------")
 
@@ -177,11 +187,13 @@ def chargerCanTask():
         if chargerState.state!=3:
             buffer=[0]*8
             msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=buffer,is_extended_id=True)
+            write_in_log(msg)
             bus.send(msg)
             break
         if deviceParams.chargerType == 1 :
             # global rxBMSData
             msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=BMSdata.rxBMSData,is_extended_id=True)
+            write_in_log(msg)
             bus.send(msg)
             time.sleep(1)
         elif deviceParams.chargerType == 2:
@@ -189,6 +201,7 @@ def chargerCanTask():
             buffer[0] = 1
             buffer[1] = canID.FC_ID
             msg = can.Message(arbitration_id=canID.tx_NMT_Start, data=buffer,is_extended_id=False)
+            write_in_log(msg)
             bus.send(msg)
 
             for i in range(0,4):
@@ -197,12 +210,14 @@ def chargerCanTask():
                 buffer[i]=buffer[i]+1
             time.sleep(0.02)
             msg = can.Message(arbitration_id=canID.tx_RPDO1, data=buffer,is_extended_id=False)
+            write_in_log(msg)
             bus.send(msg)
 
             for i in range(4,8):
                 buffer[i]=0
             buffer[7]=4
             msg = can.Message(arbitration_id=canID.tx_RPDO2, data=buffer,is_extended_id=False)
+            write_in_log(msg)
             bus.send(msg)
             time.sleep(0.02)
      

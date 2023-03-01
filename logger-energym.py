@@ -16,6 +16,8 @@ class Cbus:
             else: 
                 logging.info("NULL DATA")
             
+
+
 if __name__ == "__main__":
     bus = Cbus()
     bus.read_data()
