@@ -38,7 +38,7 @@ class cml_data_t:
         self.min_output_current = 0
 cml_data=cml_data_t()
 
-class ccs_data_t:
+class ccs_data_t:    # Not right correct this 
     def __init__(self):
         self.output_voltage = 0
         self.output_current = 0
