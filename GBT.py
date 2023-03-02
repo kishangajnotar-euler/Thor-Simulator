@@ -1,14 +1,12 @@
 from main import GBT_Stage, charger_info
-from structure import GBT_STAGE, crm_data_t
+from structure import GBT_STAGE, crm_data_t, cml_data, bcl_data, crm_data
 import time
 from datetime import datetime, timedelta
-
-crm_data = crm_data_t()
-
+from BMSdata import rxBMSData
 from structure import GBT_STAGE, charger_info_t
 import time
 from gbt_structure import *
-from main import CAN_1
+from main import CAN_1, CAN_2
 import can
 import canID
 GBT_Stage = GBT_STAGE.HANDSHAKE
@@ -74,7 +72,7 @@ def send_cts():
     message = can.Message(arbitration_id=canID.GBT_CTS_CAN_ID, data=msg, is_extended_id=True)
     CAN_1.send(message)
 
-def send_cml():
+def send_cml():  
     msg=cml_data
     message = can.Message(arbitration_id=canID.GBT_CML_CAN_ID, data=msg, is_extended_id=True)
     CAN_1.send(message)
@@ -83,7 +81,6 @@ def send_cro():
     msg=cro_data
     message = can.Message(arbitration_id=canID.GBT_CRO_CAN_ID, data=msg, is_extended_id=True)
     CAN_1.send(message)
-
 
 def send_crm(can_data: list) -> None:
     can_data[0] = crm_data.crm_result & 0xFF
@@ -94,8 +91,15 @@ def send_crm(can_data: list) -> None:
     can_data[5] = 0x68 & 0xFF
     can_data[6] = 0x69 & 0xFF
     can_data[7] = 0x76 & 0xFF
-    can.Message(arbitration_id=canID.GBT_CRM_CAN_ID, data=can_data, is_extended_id=True)
-
+    msg = can.Message(arbitration_id=canID.GBT_CRM_CAN_ID, data=can_data, is_extended_id=True)
+    CAN_1.send(msg)
+    
+def send_chm(can_data: list):
+    can_data[0] = 1
+    can_data[1] = 1
+    can_data[2] = 128
+    mssg = can.Message(arbitration_id=canID.GBT_CHM_CAN_ID, data=can_data, is_extended_id=True)
+    CAN_1.send(mssg)
 
 def prepare_state_crm():
     global crm_data
@@ -109,14 +113,12 @@ def parse_state_chm():
     chm_data.version_0=1
     chm_data.version_1=128
     charger_info.chm_op_state=0
-
-def send_chm(can_data: list):
-    can_data[0] = 1
-    can_data[1] = 1
-    can_data[2] = 128
-    mssg = can.Message(arbitration_id=canID.GBT_CHM_CAN_ID, data=can_data, is_extended_id=True)
-    CAN_1.send(mssg)
-
+    
+def prepare_state_css():
+    charger_info.bsm_received = 0
+    
+def prepare_state_cst():
+    charger_info.bsd_received = 0
 
 def handleHandshake(can_data):
     global crm_data
@@ -199,16 +201,53 @@ def handleError():
     send_cem()
     time.sleep(1)
 
+def handleCharging(can_data):
+    while (GBT_Stage == GBT_STAGE.CHARGING):
+        if charger_info.bcl_received == 1:
+            prepare_state_css()
+            prepare_state_cst()
+            while True:
+                iSet = min(cml_data.max_output_current, bcl_data.require_current)
+                vSet =  bcl_data.require_voltage
+                iSet=iSet*10
+                vSet=vSet*10
+                rxBMSData[0] = vSet >> 8
+                rxBMSData[1] = vSet & 0xFF
+                rxBMSData[2] = iSet >> 8
+                rxBMSData[3] = iSet & 0xFF
+                msg = can.Message(arbitration_id=canID.GBT_CCS_CAN_ID, data=can_data, is_extended_id=True)
+                CAN_1.send(msg)
+                msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=rxBMSData, is_extended_id=True)
+                CAN_2.send(msg)
+
+                time.sleep(0.05)
+
+                if charger_info.bst_received == 1:
+                    send_cst()
+                    time.sleep(0.01)
+                    GBT_Stage = GBT_STAGE.END
+        else:
+            send_cro()
+            time.sleep(0.25)
+    if GBT_Stage == GBT_STAGE.CHARGING:
+        GBT_Stage = GBT_STAGE.END
+
 def GBTask():
     bms_data_settings_init()
     can_data = [0] * 8
-    bms_data_settings_init()
+
+    cml_data.max_output_voltage = 1000.0
+    cml_data.min_output_voltage = 500.0
+    cml_data.max_output_current = 1200.0
+    cml_data.min_output_current = 400
+
     while True: 
         if GBT_Stage == GBT_STAGE.HANDSHAKE: 
             handleHandshake()
         elif GBT_Stage == GBT_STAGE.CONFIG:
             handleConfig()
         elif GBT_Stage == GBT_STAGE.CHARGING:
+            handleCharging(can_data)
             pass
         elif GBT_Stage == GBT_STAGE.END:
             handleEnd()

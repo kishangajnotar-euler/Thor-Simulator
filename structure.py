@@ -173,8 +173,30 @@ class crm_data_t:
         self.charger_sn = 0
 
 
+class brm_data_t:
+    def __init__(self) -> None:
+        self.version_1 = 0x01
+        self.version_0 = 0x01
+        self.battery_type = 0x01
+        self.total_battery_rate_capicity
+        self.total_battery_rate_voltage
 
+class  cml_data_t: 
+    def __init__(self) -> None:
+        self.max_output_voltage = 0
+        self.min_output_voltage = 0
+        self.max_output_current = 0
+        self.min_output_current = 0
 
+class bcl_data_t:
+        def __init__(self) -> None:
+            self.require_voltage = 0
+            self.require_current = 0
+            self.charge_mode = 0x01
+
+bcl_data = bcl_data_t()
+cml_data = cml_data_t()
+brm_data = brm_data_t()
 bmsdata = BMSDataParams()
 
 #charger State 
