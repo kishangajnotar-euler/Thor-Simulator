@@ -13,8 +13,8 @@ def parse_can_brm(canmsg):
     brm_data.version_1                   = ((float)(data[2] << 16) + (data[1] << 8) + data[0]) / 10.0
     brm_data.version_0                   = ((float)(data[2])) / 10.0
     brm_data.battery_type                = ((float)(data[3])) / 10.0
-    brm_data.total_battery_rate_capicity = ((float)((data[5] << 8) + data[4])) / 10.0
-    brm_data.total_battery_rate_voltage  = ((float)((data[7] << 8) + data[6])) / 10.0
+    # brm_data.total_battery_rate_capicity = ((float)((data[5] << 8) + data[4])) / 10.0
+    # brm_data.total_battery_rate_voltage  = ((float)((data[7] << 8) + data[6])) / 10.0
     if charger_info.brm_received == 0: 
         charger_info.settings.crm_data.crm_result = 0xaa
         charger_info.brm_received = 1
@@ -93,25 +93,25 @@ def can1():
                     # print("BMS DATA ----------------------------------")
                     # print(rxBMSData)
             if msg.arbitration_id == 0x1CEC56F4:
-                handle_j1939_mp_msg(msg)
+                handle_j1939_mp_msg(msg.data)
             if msg.arbitration_id == canID.GBT_BHM_CAN_ID:
-                parse_can_bhm(msg)
+                parse_can_bhm(msg.data)
             if msg.arbitration_id == canID.GBT_BRM_CAN_ID:
-                parse_can_brm(msg)
+                parse_can_brm(msg.data)
             if msg.arbitration_id == canID.GBT_BCP_CAN_ID:
-                parse_can_bcp(msg)
+                parse_can_bcp(msg.data)
             if msg.arbitration_id == canID.GBT_BRO_CAN_ID:
-                parse_can_bro(msg)
+                parse_can_bro(msg.data)
             if msg.arbitration_id == canID.GBT_BCL_CAN_ID:
-                parse_can_bcl(msg)
+                parse_can_bcl(msg.data)
             if msg.arbitration_id == canID.GBT_BCS_CAN_ID:
-                parse_can_bcs(msg)
+                parse_can_bcs(msg.data)
             if msg.arbitration_id == canID.GBT_BSM_CAN_ID:
-                parse_can_bsm(msg)
+                parse_can_bsm(msg.data)
             if msg.arbitration_id == canID.GBT_BST_CAN_ID:
-                parse_can_bst(msg)
+                parse_can_bst(msg.data)
             if msg.arbitration_id == canID.GBT_BSD_CAN_ID:
-                parse_can_bsd(msg)
+                parse_can_bsd(msg.data)
             
             
             
