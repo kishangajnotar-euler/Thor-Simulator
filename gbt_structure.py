@@ -79,7 +79,7 @@ class bms_data_settings_t:
     def __init__(self):
         self.dst = 0
         self.src = 0
-        self.chm_data = cem_data_t()
+        self.chm_data = chm_data_t()
         self.crm_data = crm_data_t()
         self.cts_data = cts_data_t()
         self.cml_data = cml_data_t()
