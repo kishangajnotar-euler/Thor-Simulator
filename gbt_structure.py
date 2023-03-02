@@ -172,8 +172,30 @@ class charger_info_t:
         self.module_output_current = 0
         self.bms_connect_retry = 0
 
+class bcs_data_t:
+    def __init__(self):
+        self.charge_voltage=0.1
+        self.charge_current=0.1
+        self.soc=0
+        self.remain_min=0
+class bsm_data_t:
+    def __init__(self) :
+        self.single_max_voltage_group=0
+        self.battery_max_temperature=0
+        self.battery_max_temperature_sn=0
+        self.battery_min_temperature=0
+        self.battery_min_temperature_sn=0
+        
 bcl_data = bcl_data_t()
+bcs_data=bcs_data_t()
+bsm_data=bsm_data_t()
 brm_data = brm_data_t()
 GBT_Stage = GBT_STAGE.HANDSHAKE
 charger_info = charger_info_t()
 
+class J1939_Message_t:
+        def __init__(self):
+            self.pgn = 0
+            self.size = 0
+            self.data = bytearray(1785)
+mp_msg=J1939_Message_t()      
