@@ -1,16 +1,11 @@
-from main import GBT_Stage, charger_info
-from structure import GBT_STAGE, crm_data_t, cml_data, bcl_data, crm_data
 import time
 from datetime import datetime, timedelta
 from BMSdata import rxBMSData
-from structure import GBT_STAGE, charger_info_t
 import time
 from gbt_structure import *
 from main import CAN_1, CAN_2
 import can
 import canID
-GBT_Stage = GBT_STAGE.HANDSHAKE
-charger_info = charger_info_t()
 
 def bms_data_settings_init():
     settings.dst=0xf4
