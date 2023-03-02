@@ -1,6 +1,5 @@
 from enum import Enum
 import multiprocessing
-from gbt_structure import bms_data_settings_t
 
 numberofBMSTempSensors =  6
 #this is for xeventgroup wait 
@@ -96,107 +95,7 @@ class chargerState_t():
 #         self.StoreOperation = store_operation
 
 #bmsdata struct
-class GBT_STAGE(Enum):
-    HANDSHAKE = 0
-    CONFIG = 1
-    CHARGING = 2
-    END = 3
-    ERRORS = 4
 
-class charger_info_t:
-    def __init__(self):
-        # self.list = None
-        # self.can_info = None
-        self.state = None
-        self.charger_request_state = None
-        # self.handle_mutex = None
-        # self.channel_info_config = None
-        self.a_f_b_info = None
-        self.channel_com_info = None
-        self.channel_info = None
-        # self.multi_packets_info = None
-        self.settings = bms_data_settings_t()
-        # self.report_status_chain = None
-        self.stamp = 0
-        self.stamp_1 = 0
-        self.stamp_2 = 0
-        self.send_stamp = 0
-        self.send_stamp_1 = 0
-        self.start_send_cst_stamp = 0
-        # self.charger_op_ctx = None
-        # self.charger_op_ctx_gun_lock = None
-        self.idle_op_state = None
-        self.chm_op_state = None
-        self.cro_op_state = None
-        self.csd_cem_op_state = None
-        self.bhm_received = 0
-        self.brm_received = 0
-        self.bcp_received = 0
-        self.bro_received = 0
-        self.bcl_received = 0
-        self.bcs_received = 0
-        self.bsm_received = 0
-        self.bst_received = 0
-        self.bsd_received = 0
-        self.bem_received = 0
-        self.precharge_voltage = 0
-        self.precharge_action = 0
-        self.auxiliary_power_state = 0
-        self.gun_lock_state = 0
-        self.power_output_state = 0
-        self.gun_connect_state = 0
-        self.gun_connect_state_debounce_count = 0
-        self.gun_connect_state_update_stamp = 0
-        self.door_state = 0
-        self.error_stop_state = 0
-        self.gb = 0
-        self.test_mode = 0
-        self.precharge_enable = 0
-        self.fault = 0
-        self.charger_power_on = 0
-        self.manual = 0
-        self.adhesion_test = 0
-        self.double_gun_one_car = 0
-        self.cp_ad = 0
-        self.charger_output_voltage = 0
-        self.charger_output_current = 0
-        self.auxiliary_power_type = 0
-        self.module_output_voltage = 0
-        self.channel_max_output_power = 0
-        self.module_output_current = 0
-        self.bms_connect_retry = 0
-
-
-class crm_data_t:
-    def __init__(self):
-        self.crm_result = 0
-        self.charger_sn = 0
-
-
-class brm_data_t:
-    def __init__(self) -> None:
-        self.version_1 = 0x01
-        self.version_0 = 0x01
-        self.battery_type = 0x01
-        self.total_battery_rate_capicity
-        self.total_battery_rate_voltage
-
-class  cml_data_t: 
-    def __init__(self) -> None:
-        self.max_output_voltage = 0
-        self.min_output_voltage = 0
-        self.max_output_current = 0
-        self.min_output_current = 0
-
-class bcl_data_t:
-        def __init__(self) -> None:
-            self.require_voltage = 0
-            self.require_current = 0
-            self.charge_mode = 0x01
-
-bcl_data = bcl_data_t()
-cml_data = cml_data_t()
-brm_data = brm_data_t()
 bmsdata = BMSDataParams()
 
 #charger State 

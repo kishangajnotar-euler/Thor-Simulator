@@ -1,5 +1,5 @@
 from typing import Union
-
+from enum import Enum
 class bro_data_t():
     bro_reasult=0
 bro_data=bro_data_t()
@@ -89,39 +89,91 @@ class bms_data_settings_t:
         self.cem_data = cem_data_t()
 settings=bms_data_settings_t()
 
+class brm_data_t:
+    def __init__(self) -> None:
+        self.version_1 = 0x01
+        self.version_0 = 0x01
+        self.battery_type = 0x01
+        self.total_battery_rate_capicity
+        self.total_battery_rate_voltage
+class bcl_data_t:
+        def __init__(self) -> None:
+            self.require_voltage = 0
+            self.require_current = 0
+            self.charge_mode = 0x01
 
+class GBT_STAGE(Enum):
+    HANDSHAKE = 0
+    CONFIG = 1
+    CHARGING = 2
+    END = 3
+    ERRORS = 4
 
- 
-# typedef  struct  { 
-# 	union  { 
-# 		struct  { 
-# 			uint8_t  brm_timeout :  2  ;  //  0x00-normal, 0x01-timeout, 0x10-untrusted state 
-# 			uint8_t  reserved_0 :  6 ; 
-# 		} s; 
-# 		uint8_t v  ; 
-# } u1; 
-# 	union  { 
-# 		struct  { 
-# 			uint8_t  bcp_timeout :  2  ;  //  0x00-normal, 0x01-timeout, 0x10-untrusted state 
-# 			uint8_t  bro_timeout :  2  ;  //  0x00-normal, 0x01-timeout, 0x10-untrusted status 
-# 			uint8_t  reserved_1 :  4 ; 
-# 		} s; 
-# 		uint8_t v  ; 
-# } u2; 
-# 	union  { 
-# 		struct  { 
-# 			uint8_t  bcs_timeout :  2  ;  //  0x00-normal, 0x01-timeout, 0x10-untrusted state 
-# 			uint8_t  bcl_timeout :  2  ;  //  0x00-normal, 0x01-timeout, 0x10-untrusted state 
-# 			uint8_t  bst_timeout :  2  ;  //  0x00-normal, 0x01-timeout, 0x10-untrusted state 
-# 			uint8_t  reserved_2 :  2 ; 
-# 		} s; 
-# 		uint8_t v  ; 
-# } u3; 
-# 	union  { 
-# 		struct  { 
-# 			uint8_t  bsd_timeout :  2  ;  //  0x00-normal, 0x01-timeout, 0x10-untrusted state 
-# 			uint8_t  other :  6 ; 
-# 		} s; 
-# 		uint8_t v  ; 
-# } u4; 
-# }  cem_data_t ; 
+class charger_info_t:
+    def __init__(self):
+        # self.list = None
+        # self.can_info = None
+        self.state = None
+        self.charger_request_state = None
+        # self.handle_mutex = None
+        # self.channel_info_config = None
+        self.a_f_b_info = None
+        self.channel_com_info = None
+        self.channel_info = None
+        # self.multi_packets_info = None
+        self.settings = bms_data_settings_t()
+        # self.report_status_chain = None
+        self.stamp = 0
+        self.stamp_1 = 0
+        self.stamp_2 = 0
+        self.send_stamp = 0
+        self.send_stamp_1 = 0
+        self.start_send_cst_stamp = 0
+        # self.charger_op_ctx = None
+        # self.charger_op_ctx_gun_lock = None
+        self.idle_op_state = None
+        self.chm_op_state = None
+        self.cro_op_state = None
+        self.csd_cem_op_state = None
+        self.bhm_received = 0
+        self.brm_received = 0
+        self.bcp_received = 0
+        self.bro_received = 0
+        self.bcl_received = 0
+        self.bcs_received = 0
+        self.bsm_received = 0
+        self.bst_received = 0
+        self.bsd_received = 0
+        self.bem_received = 0
+        self.precharge_voltage = 0
+        self.precharge_action = 0
+        self.auxiliary_power_state = 0
+        self.gun_lock_state = 0
+        self.power_output_state = 0
+        self.gun_connect_state = 0
+        self.gun_connect_state_debounce_count = 0
+        self.gun_connect_state_update_stamp = 0
+        self.door_state = 0
+        self.error_stop_state = 0
+        self.gb = 0
+        self.test_mode = 0
+        self.precharge_enable = 0
+        self.fault = 0
+        self.charger_power_on = 0
+        self.manual = 0
+        self.adhesion_test = 0
+        self.double_gun_one_car = 0
+        self.cp_ad = 0
+        self.charger_output_voltage = 0
+        self.charger_output_current = 0
+        self.auxiliary_power_type = 0
+        self.module_output_voltage = 0
+        self.channel_max_output_power = 0
+        self.module_output_current = 0
+        self.bms_connect_retry = 0
+
+bcl_data = bcl_data_t()
+brm_data = brm_data_t()
+GBT_Stage = GBT_STAGE.HANDSHAKE
+charger_info = charger_info_t()
+
