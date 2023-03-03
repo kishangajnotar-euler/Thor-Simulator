@@ -7,8 +7,10 @@ from data_log import write_in_log
 from gbt_structure import brm_data, bcl_data, charger_info,mp_msg,bro_data,bcs_data,bsm_data
 
 def parse_data(canmsg):
+    print(canmsg)
     data = str(canmsg)[-41:-18].split(" ")
-    data = [int(v,16) for v in data]
+    data = [int(v,16) for v in data if v != '']
+    print("--",data,"--")
     return data
 
 
@@ -25,7 +27,7 @@ def parse_can_brm(canmsg):
         charger_info.settings.crm_data.crm_result = 0xaa
         charger_info.brm_received = 1
 
-def parse_can_bhm(canmsg):
+def parse_can_bhm():
     charger_info.bhm_received = 1
 
 def parse_can_bcl(canmsg):
@@ -78,7 +80,7 @@ def handle_j1939_mp_msg(canmsg):
     if mp_msg.pgn == 0x000200:
         parse_can_brm(mp_msg.data)
     if mp_msg.pgn == 0x000600:
-        parse_can_bcp(mp_msg.data)
+        parse_can_bcp()
     if mp_msg.pgn == 0x001100:
         parse_can_bcs(mp_msg.data)
 
@@ -100,9 +102,14 @@ def can1():
                     # print("BMS DATA ----------------------------------")
                     # print(rxBMSData)
             if msg.arbitration_id == 0x1CEC56F4:
+                # print(" ========================================================= ")
+                # print ( "EXTENDED IDS ---------------------- ")
+                # print(msg)
+
+                # print("+++++++++++++++++++++++++++++++++++++++++++++++++")
                 handle_j1939_mp_msg(parse_data(msg))
             if msg.arbitration_id == canID.GBT_BHM_CAN_ID:
-                parse_can_bhm(parse_data(msg))
+                parse_can_bhm()
             if msg.arbitration_id == canID.GBT_BRM_CAN_ID:
                 parse_can_brm(parse_data(msg))
             if msg.arbitration_id == canID.GBT_BCP_CAN_ID:

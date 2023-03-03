@@ -20,7 +20,7 @@ def starkTXCallback():
         msg = can.Message(arbitration_id=canID.tx_Sync, data=buffer, is_extended_id=False)
         CAN_2.send(msg)
         write_in_log(msg)
-        time.sleep(0.5)
+        time.sleep(1)   # increased due irregular (0.5)
 
 def chargerTXCallback():
     while (1):

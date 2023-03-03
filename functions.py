@@ -166,7 +166,7 @@ def handleChargingState():
         print(f"-------------------------------------------------------------------------------------------- ")
         if deviceParams.chargingMode == 1 and GBtask == None:
             print(" -------------------------------- TASK created -----------------------------------")
-            time.sleep(3)
+            time.sleep(0.1)
             GBtask=threading.Thread(target=GBTask)
             GBtask.start()
         time.sleep(0.1)

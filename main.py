@@ -10,13 +10,13 @@ class pycan:
         self.bus = can.interface.Bus(name, bustype = btype, bitrate = bitrate)
 
 #For linux 
-# CAN_1 = pycan(name='can0', btype='socketcan', bitrate=250000).bus
-# CAN_2 = pycan(name='can1', btype='socketcan', bitrate=250000).bus
+CAN_1 = pycan(name='can0', btype='socketcan', bitrate=250000).bus
+CAN_2 = pycan(name='can1', btype='socketcan', bitrate=250000).bus
 
 # For windows 
 # pycan(name='can0', bustype='socketcan', bitrate=250000) #use this 
-CAN_1 = can.interface.Bus(bustype='pcan', channel='PCAN_USBBUS1', bitrate=250000)  
-CAN_2 = can.interface.Bus(bustype='pcan', channel='PCAN_USBBUS2', bitrate=250000)  
+# CAN_1 = can.interface.Bus(bustype='pcan', channel='PCAN_USBBUS1', bitrate=250000)  
+# CAN_2 = can.interface.Bus(bustype='pcan', channel='PCAN_USBBUS2', bitrate=250000)  
 
 
 #filers for can2
@@ -42,7 +42,7 @@ filters_can1 = [
             {"can_id": canID.GBT_BST_CAN_ID, "can_mask": ((canID.GBT_BST_CAN_ID & canID.GBT_BST_CAN_ID) >> 13) << 16 | (((canID.GBT_BST_CAN_ID & canID.GBT_BST_CAN_ID) << 3) | 0x04), "extended": True},
             {"can_id": canID.GBT_BSD_CAN_ID, "can_mask": ((canID.GBT_BSD_CAN_ID & canID.GBT_BSD_CAN_ID) >> 13) << 16 | (((canID.GBT_BSD_CAN_ID & canID.GBT_BSD_CAN_ID) << 3) | 0x04), "extended": True}
             ]
-CAN_1.set_filters(filters_can1)
+# CAN_1.set_filters(filters_can1)
 
 #filters for can1
 

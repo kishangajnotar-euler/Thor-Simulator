@@ -94,8 +94,8 @@ class brm_data_t:
         self.version_1 = 0x01
         self.version_0 = 0x01
         self.battery_type = 0x01
-        self.total_battery_rate_capicity
-        self.total_battery_rate_voltage
+        # self.total_battery_rate_capicity
+        # self.total_battery_rate_voltage
 class bcl_data_t:
         def __init__(self) -> None:
             self.require_voltage = 0

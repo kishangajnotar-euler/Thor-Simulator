@@ -62,22 +62,26 @@ def send_cem():
     message = can.Message(arbitration_id=canID.GBT_CEM_CAN_ID, data=msg, is_extended_id=True)
     CAN_1.send(message)
     
-def send_cts():
-    msg=charger_info.settings.cts_data
-    message = can.Message(arbitration_id=canID.GBT_CTS_CAN_ID, data=msg, is_extended_id=True)
+def send_cts():   # ask anand 
+    # msg=charger_info.settings.cts_data
+    buffer = [0] * 8
+    message = can.Message(arbitration_id=canID.GBT_CTS_CAN_ID, data=buffer, is_extended_id=True)
     CAN_1.send(message)
 
 def send_cml():  
     msg=cml_data
-    message = can.Message(arbitration_id=canID.GBT_CML_CAN_ID, data=msg, is_extended_id=True)
+    buffer = [0x03, 0xE8, 0x01, 0xF4, 0x04, 0xB0, 0x01, 0x90]
+    print("CML ")
+    message = can.Message(arbitration_id=canID.GBT_CML_CAN_ID, data=buffer, is_extended_id=True)
     CAN_1.send(message)
 
 def send_cro():
-    msg=cro_data
+    msg=[cro_data.cro_reasult]
     message = can.Message(arbitration_id=canID.GBT_CRO_CAN_ID, data=msg, is_extended_id=True)
     CAN_1.send(message)
 
 def send_crm(can_data: list) -> None:
+    global crm_data
     can_data[0] = crm_data.crm_result & 0xFF
     can_data[1] = crm_data.charger_sn & 0xFF
     can_data[2] = 0x00 & 0xFF
@@ -86,6 +90,7 @@ def send_crm(can_data: list) -> None:
     can_data[5] = 0x68 & 0xFF
     can_data[6] = 0x69 & 0xFF
     can_data[7] = 0x76 & 0xFF
+    print("can_data inside send_crm()  ", can_data)
     msg = can.Message(arbitration_id=canID.GBT_CRM_CAN_ID, data=can_data, is_extended_id=True)
     CAN_1.send(msg)
     
@@ -116,31 +121,38 @@ def prepare_state_cst():
     charger_info.bsd_received = 0
 
 def handleHandshake(can_data):
-    global crm_data
+    global crm_data, GBT_Stage
+    print("Inside Handshake task ")
     parse_state_chm()
     while (GBT_Stage == GBT_STAGE.HANDSHAKE):
         send_chm(can_data)
+        print("Sending CHM ..")
         time.sleep(0.25)
         if charger_info.bhm_received == 1:
+            print("Received BMH ..")
             break
     prepare_state_crm()
     time.sleep(0.5)
     xstart = datetime.now()
     while(GBT_Stage == GBT_STAGE.HANDSHAKE):
         if charger_info.brm_received == 1:
+            print("BRM received ...")
             crm_data.crm_result = 170
             send_crm(can_data)
             time.sleep(1)
             break
         send_crm(can_data)
+        print("Sending CRM ...")
         time.sleep(0.25)
         if (datetime.now() - xstart) > timedelta(seconds=1000*100):
             GBT_Stage = GBT_STAGE.ERRORS
             break
     if GBT_Stage == GBT_STAGE.HANDSHAKE:
+        print("Changing state to CONFIG .")
         GBT_Stage = GBT_STAGE.CONFIG
 
-def handleConfig():
+def handleConfig(can_data):
+    global GBT_Stage
     xstart = datetime.now()
     prepare_state_cts_cml()
     while(1):
@@ -151,6 +163,8 @@ def handleConfig():
                 send_cml()
                 time.sleep(1)
                 if charger_info.bro_received==1 :
+
+                    print("++++++++++++++++++++++++++++++++++ BRO RECEIVED ++++++++++++++++++++++++++++")
                     break
                 if (datetime.now() - xstart) > timedelta(seconds=1000*100):
                     GBT_Stage = GBT_STAGE.ERRORS
@@ -176,8 +190,10 @@ def handleConfig():
             time.sleep(1)
     if GBT_Stage==GBT_STAGE.CONFIG:
         GBT_Stage=GBT_STAGE.CHARGING
+        print("CHANGING STATE TO CHARGING ---------------------")
 
 def handleEnd():
+    global GBT_Stage
     xstart = datetime.now()
     while(GBT_Stage==GBT_STAGE.END):
         prepare_state_csd_cem()
@@ -197,25 +213,31 @@ def handleError():
     time.sleep(1)
 
 def handleCharging(can_data):
+    global GBT_Stage
     while (GBT_Stage == GBT_STAGE.CHARGING):
         if charger_info.bcl_received == 1:
             prepare_state_css()
             prepare_state_cst()
             while True:
+                print("HANDLE CHARGING ----------------------------------------------------------------------------")
+
+                # print("HANDLE CHARGING ----------------------------------------------------------------------------")
+                # print("HANDLE CHARGING ----------------------------------------------------------------------------")
+
                 iSet = min(cml_data.max_output_current, bcl_data.require_current)
                 vSet =  bcl_data.require_voltage
-                iSet=iSet*10
-                vSet=vSet*10
-                rxBMSData[0] = vSet >> 8
-                rxBMSData[1] = vSet & 0xFF
-                rxBMSData[2] = iSet >> 8
-                rxBMSData[3] = iSet & 0xFF
+                iSet=int(iSet*10)
+                vSet=int(vSet*10)
+                rxBMSData[0] = int(vSet >> 8)
+                rxBMSData[1] = int(vSet & 0xFF)
+                rxBMSData[2] = int(iSet >> 8)
+                rxBMSData[3] = int(iSet & 0xFF)
                 msg = can.Message(arbitration_id=canID.GBT_CCS_CAN_ID, data=can_data, is_extended_id=True)
                 CAN_1.send(msg)
                 msg = can.Message(arbitration_id=canID.tx_6k6_charger, data=rxBMSData, is_extended_id=True)
                 CAN_2.send(msg)
 
-                time.sleep(0.05)
+                time.sleep(0.25)
 
                 if charger_info.bst_received == 1:
                     send_cst()
@@ -238,9 +260,9 @@ def GBTask():
 
     while True: 
         if GBT_Stage == GBT_STAGE.HANDSHAKE: 
-            handleHandshake()
+            handleHandshake(can_data)
         elif GBT_Stage == GBT_STAGE.CONFIG:
-            handleConfig()
+            handleConfig(can_data)
         elif GBT_Stage == GBT_STAGE.CHARGING:
             handleCharging(can_data)
         elif GBT_Stage == GBT_STAGE.END:
