@@ -243,7 +243,6 @@ def GBTask():
             handleConfig()
         elif GBT_Stage == GBT_STAGE.CHARGING:
             handleCharging(can_data)
-            pass
         elif GBT_Stage == GBT_STAGE.END:
             handleEnd()
         elif GBT_Stage == GBT_STAGE.ERRORS:
